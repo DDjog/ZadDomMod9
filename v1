@@ -1,0 +1,63 @@
+def input_error(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except KeyError:
+           return "Enter user's name"
+        except ValueError:
+            return "Enter user's name and user's phone number"
+        except IndexError:
+            return "No such a contact"
+    return wrapper
+contacts ={}
+@input_error
+def add_contact(name, phone):
+    contacts[name]=phone
+    return f"Contact was added: {name}, {phone}"
+@input_error
+def change_phone(name, phone):
+    if name in contacts:
+        contacts[name]=phone
+        return f"Phone number change for {name} on {phone}"
+    else:
+       return IndexError
+@input_error
+def phone(name):
+    if name in contacts:
+        return f"Phone number for {name} is {contacts[name]}."
+    else:
+        return IndexError
+@input_error
+def show_all(name, phone):
+    if not contacts:
+        return "No contacts list"
+    else:
+        return contacts
+def main():
+    while True:
+        command=input("Input command: hello/add.../change.../phone.../show all/good bye: ").lower()
+        if command=="hello":
+            print ("How can I help you?")
+        elif command.startswith("add"):
+            _, name, phone = command.split(" ")
+            print (add_contact(name, phone))
+        elif command.startswith("change"):
+            _, name, phone = command.split(" ")
+            print(change_phone(name, phone))
+        elif command.startswith("phone"):
+            _, name = command.split(" ")
+            print(phone(name))
+        elif command=="show all":
+            print(show_all())
+        elif command in ["good bye", "close", "exit", "."]:
+            print("Good bye!")
+            break
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+
